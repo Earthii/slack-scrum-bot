@@ -15,26 +15,42 @@ var botActions = require('./botActions');
 const botName ='scrumbot';
 
 bot.on('start', function() {
-    // more information about additional params https://api.slack.com/methods/chat.postMessage
     console.log(`\n*****************************\n|       Bot initilized      |\n*****************************`);
+
+    // more information about additional params https://api.slack.com/methods/chat.postMessage
     var params = {
         icon_emoji: ':cat:'
     };
     bot.on('message', function(data) {
         if(data.type == 'desktop_notification' && isBotMentioned(data)){
             let contentArr = data.content.split(" ");
+
             let action = contentArr[2];
             let params = contentArr.slice(3);
-            actionHandler(action, params);
+            let channel = data.channel;
+
+            if(contentArr.includes("fak") || contentArr.includes("stfu") || contentArr.includes("fuk") || contentArr.includes("kid")){
+                bot.postMessage(channel, 'Stfu Kid, Why you messing with me');
+            }
+
+            actionHandler(action, params, channel);
         }
     });
 });
 
-function actionHandler(action, params){
+function actionHandler(action, params, channel){
     if(action == undefined || !botActions.has(action)){
-        bot.postMessageToChannel('general', 'I Dont understand that action', params);
+        bot.postMessage(channel, 'I Dont understand that action');
     }else{
-        botActions.get(action)(params);
+        if(params.length == 0){
+            bot.postMessage(channel, 'Seems like you\'re missing some parameters!');
+        }else{
+            try{
+                botActions.get(action)(bot, params, channel);
+            }catch(err){
+                console.error(err)
+            }
+        }
     }
 
 
