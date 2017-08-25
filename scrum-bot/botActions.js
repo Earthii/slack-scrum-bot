@@ -16,10 +16,11 @@ function scrum(){
     console.log("scrum")
 }
 
-module.exports.botActions = {
-    createTeam : createTeam,
-    deleteTeam : deleteTeam,
-    inviteMember : inviteMember,
-    removeMember : removeMember,
-    scrum : scrum
-}
+let actions = new Map();
+actions.set("new-team",createTeam);
+actions.set("delete-team", deleteTeam);
+actions.set("invite-member", inviteMember);
+actions.set("remove-member", removeMember);
+actions.set("scrum",scrum);
+
+module.exports = actions;

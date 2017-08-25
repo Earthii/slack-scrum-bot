@@ -7,18 +7,12 @@ var app = express();
 
 var SlackBot = require('slackbots');
 var bot = new SlackBot({
-    token:'xoxb-231326420275-o4u6zLaNlFiTa1e1EWsgiK2L',
+    token:'xoxb-231007826193-NWQpbOYithTEECwAOUBlY8Lr',
     name: 'ScrumBot'
 });
 var botActions = require('./botActions');
 
-const actions = [
-    'createTeam',
-    'deleteTeam',
-    'inviteMember',
-    'deleteMember',
-    'scrum'
-]
+const botName ='scrumbot';
 
 bot.on('start', function() {
     // more information about additional params https://api.slack.com/methods/chat.postMessage
@@ -27,25 +21,34 @@ bot.on('start', function() {
         icon_emoji: ':cat:'
     };
     bot.on('message', function(data) {
-        if(data.type == 'desktop_notification'){
-            let content  = data.content.split(" ");
-            let action = content.filter(text =>{
-                if(actions.includes(text)){
-                    return text
-                }
-            })
-            actionHandler(action, content);
+        if(data.type == 'desktop_notification' && isBotMentioned(data)){
+            let contentArr = data.content.split(" ");
+            let action = contentArr[2];
+            let params = contentArr.slice(3);
+            actionHandler(action, params);
         }
     });
 });
 
 function actionHandler(action, params){
-    if(action == undefined || action.length == 0){
-        bot.postMessageToChannel('general', 'I Dont understand that action!', params);
+    if(action == undefined || !botActions.has(action)){
+        bot.postMessageToChannel('general', 'I Dont understand that action', params);
+    }else{
+        botActions.get(action)(params);
     }
+
 
 }
 
+function isBotMentioned(data){
+
+    if(data.content != undefined){
+        return data.content.split(" ").includes('@'+botName);
+    }else{
+        return false
+    }
+
+}
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
