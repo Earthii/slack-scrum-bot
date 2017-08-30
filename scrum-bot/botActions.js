@@ -130,7 +130,10 @@ function listAllTeams(bot, params, channel) {
 }
 
 function scrum(bot, params) {
-    console.log("scrum")
+    console.log("scrum params", params)
+    if(params.length == 0){
+        throw "Seems like you\'re missing some parameters!"
+    }
 }
 
 let actions = new Map();

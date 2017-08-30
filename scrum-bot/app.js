@@ -30,10 +30,6 @@ bot.on('start', function() {
             let params = contentArr.slice(3);
             let channel = data.channel;
 
-            if(contentArr.includes("fak") || contentArr.includes("stfu") || contentArr.includes("fuk") || contentArr.includes("kid")){
-                bot.postMessage(channel, 'Stfu Kid, Why you messing with me');
-            }
-
             actionHandler(action, params, channel);
         }
     });
