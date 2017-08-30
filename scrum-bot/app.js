@@ -21,6 +21,7 @@ bot.on('start', function() {
     var params = {
         icon_emoji: ':cat:'
     };
+
     bot.on('message', function(data) {
         if(data.type == 'desktop_notification' && isBotMentioned(data)){
             let contentArr = data.content.split(" ");
@@ -42,14 +43,11 @@ function actionHandler(action, params, channel){
     if(action == undefined || !botActions.has(action)){
         bot.postMessage(channel, 'I Dont understand that action');
     }else{
-        if(params.length == 0){
-            bot.postMessage(channel, 'Seems like you\'re missing some parameters!');
-        }else{
-            try{
-                botActions.get(action)(bot, params, channel);
-            }catch(err){
-                console.error(err)
-            }
+        try{
+            botActions.get(action)(bot, params, channel);
+        }catch(err){
+            bot.postMessage(channel, err);
+
         }
     }
 
