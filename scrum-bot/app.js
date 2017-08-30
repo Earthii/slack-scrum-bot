@@ -7,12 +7,10 @@ var app = express();
 
 var SlackBot = require('slackbots');
 var bot = new SlackBot({
-    token:'xoxb-231007826193-NWQpbOYithTEECwAOUBlY8Lr',
-    name: 'ScrumBot'
+    token:'xoxb-234107042308-TnLXg7D0EKPu9DtzKTcvmmQ8',
+    name: 'scrum_bot'
 });
 var botActions = require('./botActions');
-
-const botName ='scrumbot';
 
 bot.on('start', function() {
     console.log(`\n*****************************\n|       Bot initilized      |\n*****************************`);
@@ -25,7 +23,6 @@ bot.on('start', function() {
     bot.on('message', function(data) {
         if(data.type == 'desktop_notification' && isBotMentioned(data)){
             let contentArr = data.content.split(" ");
-
             let action = contentArr[2];
             let params = contentArr.slice(3);
             let channel = data.channel;
@@ -53,7 +50,7 @@ function actionHandler(action, params, channel){
 function isBotMentioned(data){
 
     if(data.content != undefined){
-        return data.content.split(" ").includes('@'+botName);
+        return data.content.split(" ").includes('@'+bot.name);
     }else{
         return false
     }
