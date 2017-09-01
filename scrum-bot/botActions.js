@@ -1,8 +1,13 @@
+const CONFIG = require('./settings');
+var calendarAPI = require('node-google-calendar');
 var mongoose = require('mongoose');
+
+var cal = new calendarAPI(CONFIG);
 
 mongoose.connect('mongodb://Earthii:Eric1234x@ds159033.mlab.com:59033/scrum-bot', {
     useMongoClient: true
 })
+mongoose.Promise = global.Promise;
 
 var teamModel = require('./models/team');
 
@@ -15,7 +20,7 @@ function createTeam(bot, params, channel) {
         name: params[0],
         members: []
     })
-
+    console.log('hi')
     team.save(function (err, team) {
         if (err) {
             throw err;
@@ -124,16 +129,48 @@ function listAllTeams(bot, params, channel) {
     console.log("list all team params,", params);
     let allTeams = [];
     teamModel.find({}, (err, data)=>{
+        if(err){
+            throw err;
+        }
+        console.log(err)
         allTeams = data.map(team => team.name);
         bot.postMessage(channel, `Here is the list of all existing team ${allTeams.map(team => ' ' +team)}`);
     })
 }
 
-function scrum(bot, params) {
-    console.log("scrum params", params)
+function scrum(bot, params, channel) {
+    console.log("scrum params", params);
+
     if(params.length == 0){
         throw "Seems like you\'re missing some parameters!"
     }
+
+    let event = {
+        'start': { 'dateTime': '2017-09-01T07:00:00+08:00' },
+        'end': { 'dateTime': '2017-09-01T08:00:00+08:00' },
+        'location': 'JBBQ',
+        'summary': 'scrum',
+        'status': 'confirmed',
+        'description': 'Going to the new jbbq that recently opened',
+        'colorId': 1,
+        'sendNotifications' : true,
+        'attendees': [
+            {
+                'email' : 'eternaldag@hotmail.com'
+            }
+        ]
+    };
+
+    cal.Events.insert(calendarId = 'primary', event)
+        .then(resp => {
+            console.log('inserted event:');
+            console.log(resp)
+            bot.postMessage(channel, `Calendar event created: ${resp.summary}`);
+
+        })
+        .catch(err => {
+            console.log('Error: insertEvent-' + err.message);
+        });
 }
 
 let actions = new Map();

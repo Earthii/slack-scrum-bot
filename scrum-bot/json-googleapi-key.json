@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "strange-mariner-178618",
+  "private_key_id": "d7403122410b45c4ceea6ffffa329cf9e7ed7427",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyfNdympkXTpsj\n36eveZ0xaPNRTUMspJspDII2iKZM1hXgjz3fMka/3pTFu5RLjPh6pA7hYXBKcQJv\nOArDEuW6Dk/QbY/gJ/D2aiXGcinM6iHVNlSAFDuaj7kqES4LDkja+mA3b7jvga10\nmDWcolM+kAT/SmOG63ofsiE6oIzBOscv/kXOPG7pL5fRt3rbWHEaaQNBIwJoFnBb\nQhSjWDQkX3QDjJUhZ6KYfbdZOSSRYSi7/43nO7p0RviouTeiTN0SJqBPB98M5jbi\ng7ZDa674tN3n3pBCSk4yQa0r9hEaBZsS/IIEk/9JHO5Dk/HsBbv/YVfSWdjppNIP\nfSnAerjNAgMBAAECggEALE12gLjE5RcaxPW/vnt2PAxr0LNXyB33cWHsdDLI7Gt7\nNKj5V4w4KWnLDaV4sqQEDRTpqKGx6JhSXV7QtQjcwqjIwNhhDOd9FPzV8YLmwzke\nOrjokn3zKXMhJ8Lp5c6e4NOizD/L7I8Iidc5/23/MZk31FIXkCakwndJbi7poRBW\nigqXXqr2C6gUG9571QHXMiUEoN+WgIdQilYpYY91iLfcGSZUavcWliDmESWVHFye\nylZG1GJV/zvAmygMNq/a+JZ5aDok2a7hEa7jPYKYQOQZadpTce+SwSCDs1gJKIew\nlUcKXXc31S1MjCM397c8nJQv1l1l+3q4pqct6d2EgQKBgQDjx6IhOEHvfMMRud40\n92tKR4DzwXa2RAgNE1qxVIu58T+qQn2tBoszF4eaujYUGqNPWmyJl1KilCww9n1W\nEKwAvX9jvsFcXnyOoYON+vvofspjtA5IzHfy6DSaN/vkg3odi9AhddEdxVLA7tk9\nWIVLp4z9avRY/jVErAS1Am9hLQKBgQDImdYR1qtwCdPHzCyPWD8b1uJ6MyuTUbaW\nfu0rAPramqd6jDiaDwC7p05FAKb3EIgSdhhDPEyUOSaR5Dyti5WI/ogDgSir0lBf\nBN5m4UfacHfLVFC9G9nOJTirVyB8npbNwflgwRiQ9vQvOnOaK315nYSO3Re4VxGA\n7zSWZ2c6IQKBgGIrBsgUa+5gMd4w4gCn5ZikyoHDjnstRN8FyV+F1ZZ00AB8GZf5\nqwKBEJNxz57IgDvR99cw3Y9uFsGfahMuqkLDaOS/MKyzmDEMkRse4XSpOGbSEhnz\n7XpF823H1Qr+UyHqwO+6zD5tbaXzCrNytDgP5SbO8rJsFN8c2AZ/HyudAoGAOUjM\n+90cqer0glrI4splgzKzDAhuyiwMgx+N5Ljr6d8+Ml22kC/2mp/lVwkfpPAgm30D\n4rdmevFzFThjJ3/z3OIqvy10CtUNRIUkaaatmTCC1Rqnz8kTQq4YZ72CtnOnRuy8\npSefN05+XrpHZuBCfadAwndanbandfVZRBYVQWECgYEAxUmCQRt1U/6Aeffw3LJ9\n3AM4gmV5xyat1HX/XcUMkaZqafNmqp109xiKMkgROIcKQEnzSFtF/EQLTs9mPRZ4\nDpavhqFhhWzXG7mDMmUYoHr47PWPqv3B26Pl/iFShc6Yt+Nr6o/LyBIhOEX43Rkn\nGMOwTtufGS8P7d9px3b5DZQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "scrumbot@strange-mariner-178618.iam.gserviceaccount.com",
+  "client_id": "101428720882683804151",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/scrumbot%40strange-mariner-178618.iam.gserviceaccount.com"
+}
