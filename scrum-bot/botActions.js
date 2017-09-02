@@ -1,15 +1,8 @@
-const CONFIG = require('./settings');
+var CONFIG = require('./settings');
 var calendarAPI = require('node-google-calendar');
-var mongoose = require('mongoose');
+var teamModel = require('./models/team');
 
 var cal = new calendarAPI(CONFIG);
-
-mongoose.connect('mongodb://Earthii:Eric1234x@ds159033.mlab.com:59033/scrum-bot', {
-    useMongoClient: true
-})
-mongoose.Promise = global.Promise;
-
-var teamModel = require('./models/team');
 
 function createTeam(bot, params, channel) {
     console.log("create params", params);
@@ -132,9 +125,13 @@ function listAllTeams(bot, params, channel) {
         if(err){
             throw err;
         }
-        console.log(err)
-        allTeams = data.map(team => team.name);
-        bot.postMessage(channel, `Here is the list of all existing team ${allTeams.map(team => ' ' +team)}`);
+        if(data.length > 0){
+            allTeams = data.map(team => team.name);
+            bot.postMessage(channel, `Here is the list of all existing team:${allTeams.map(team => ' ' +team)}`);
+        }else{
+            bot.postMessage(channel, `There are currently no teams in the database!`);
+
+        }
     })
 }
 
