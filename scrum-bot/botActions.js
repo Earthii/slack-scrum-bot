@@ -138,17 +138,24 @@ function listAllTeams(bot, params, channel) {
 function scrum(bot, params, channel) {
     console.log("scrum params", params);
 
-    if(params.length == 0){
-        throw "Seems like you\'re missing some parameters!"
+    if(params.length != 2){
+        throw "Seems like the parameters for this actions are wrong. Please use this action by doing 'scrum #team #yyyy-mm-ddThh:mm:ss'"
     }
 
+    var startDate = new Date(params[1]+'-0400');
+    var endDate = new Date(startDate.getTime() + 30*60000);
+    console.log(startDate, endDate);
     let event = {
-        'start': { 'dateTime': '2017-09-01T07:00:00+08:00' },
-        'end': { 'dateTime': '2017-09-01T08:00:00+08:00' },
-        'location': 'JBBQ',
+        'start': {
+            'dateTime': startDate,
+            'timeZone': "America/Montreal",
+        },
+        'end': {
+            'dateTime': endDate,
+            'timeZone': "America/Montreal",
+        },
         'summary': 'scrum',
         'status': 'confirmed',
-        'description': 'Going to the new jbbq that recently opened',
         'colorId': 1,
         'sendNotifications' : true,
         'attendees': [
@@ -160,13 +167,11 @@ function scrum(bot, params, channel) {
 
     cal.Events.insert(calendarId = 'primary', event)
         .then(resp => {
-            console.log('inserted event:');
-            console.log(resp)
             bot.postMessage(channel, `Calendar event created: ${resp.summary}`);
 
         })
         .catch(err => {
-            console.log('Error: insertEvent-' + err.message);
+            bot.postMessage(channel, "Error: insertEvent- "+ err.message);
         });
 }
 
