@@ -34,7 +34,7 @@ db.once('open', function(){
             if(data.type == 'desktop_notification' && isBotMentioned(data)){
                 let contentArr = data.content.split(" ");
                 let channel = data.channel;
-                if(contentArr.includes("Eric")){
+                if(contentArr.includes("Eric:")){
                     let action = contentArr[2];
                     let params = contentArr.slice(3);
                     actionHandler(action, params, channel);

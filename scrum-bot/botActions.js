@@ -84,6 +84,20 @@ function addMember(bot, params, channel) {
         })
     })
 }
+function listMembers(bot, params, channel){
+    if(params.length != 1){
+        throw "Seems like the params are wrong! Please use this action by doing 'list-members #team'"
+    }
+    let teamName = params[0];
+    teamModel.findOne({name: teamName}).then(team => {
+        if (team == null) {
+            bot.postMessage(channel, 'Team did not exist... cannot add a member to a non existing team');
+            throw ""
+        }
+        bot.postMessage(channel, `The members in ${teamName} are : ${team.members.map(member => member.real_name)}`);
+    })
+}
+
 
 function removeMember(bot, params, channel) {
     console.log("delete member params", params);
@@ -173,6 +187,7 @@ actions.set("new-team", createTeam);
 actions.set("delete-team", deleteTeam);
 actions.set("add-member", addMember);
 actions.set("remove-member", removeMember);
+actions.set("list-members", listMembers);
 actions.set("list-all-teams", listAllTeams);
 actions.set("scrum", scrum);
 
