@@ -59,9 +59,14 @@ function addMember(bot, params, channel) {
         let tmpMemberArr = [...currentMembers];
         // let allNewMembers = [];
         bot.getUsers().then(allUsers => {
-            console.log(allUsers)
             var membersArr = membersToAdd.map(name => {
-                var user = allUsers.members.filter(member => member.real_name.includes(name))[0];
+                var user = allUsers.members.filter(member => {
+                    if(member.real_name == undefined){
+                        return false
+                    }
+                    return member.real_name.includes(name)
+                })[0];
+
                 if(user != null && user != undefined){
                     return {
                         username: user.name,
@@ -102,8 +107,8 @@ function listMembers(bot, params, channel){
 
 function removeMember(bot, params, channel) {
     console.log("delete member params", params);
-    if(params.length == 0){
-        throw "Seems like you\'re missing some parameters!"
+    if(params.length != 2){
+        throw "Seems like the params are wrong! Please use this action by doing 'remove-member #team #member-names'"
     }
     let teamName = params[0];
     let membersToRemove = params.slice(1);
@@ -113,8 +118,9 @@ function removeMember(bot, params, channel) {
         if (team == null) {
             throw "Team did not exist... cannot remove a member to a non existing team"
         }
-        membersToRemove.forEach(member => {
-            removeMembersPromises.push(teamModel.findByIdAndUpdate(team._id, {$pull: {members: {username: member}}}, {multi: true}).then(() => {
+        membersToRemove.forEach(name => {
+            let memberToRemove = team.members.filter(member => member.real_name.includes(name))[0];
+            removeMembersPromises.push(teamModel.findByIdAndUpdate(team._id, {$pull: {members: {username: memberToRemove.username}}}, {multi: true}).then(() => {
             }))
         })
 
