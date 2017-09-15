@@ -59,6 +59,7 @@ function addMember(bot, params, channel) {
         let tmpMemberArr = [...currentMembers];
         // let allNewMembers = [];
         bot.getUsers().then(allUsers => {
+            console.log(allUsers)
             var membersArr = membersToAdd.map(name => {
                 var user = allUsers.members.filter(member => member.real_name.includes(name))[0];
                 if(user != null && user != undefined){
@@ -148,38 +149,46 @@ function scrum(bot, params, channel) {
     if(params.length != 2){
         throw "Seems like the parameters for this actions are wrong. Please use this action by doing 'scrum #team #yyyy-mm-ddThh:mm:ss'"
     }
+    var teamName = params[0];
 
-    var startDate = new Date(params[1]+'-0400');
-    var endDate = new Date(startDate.getTime() + 30*60000);
-    console.log(startDate, endDate);
-    let event = {
-        'start': {
-            'dateTime': startDate,
-            'timeZone': "America/Montreal",
-        },
-        'end': {
-            'dateTime': endDate,
-            'timeZone': "America/Montreal",
-        },
-        'summary': 'scrum',
-        'status': 'confirmed',
-        'colorId': 1,
-        'sendNotifications' : true,
-        'attendees': [
-            {
-                'email' : 'eternaldag@hotmail.com'
+    teamModel.findOne({name: teamName}).then(team => {
+        if (team == null) {
+            bot.postMessage(channel, 'Team did not exist... cannot add a member to a non existing team');
+            throw ""
+        }
+        var startDate = new Date(params[1]+'-0400');
+        var endDate = new Date(startDate.getTime() + 30*60000);
+        var emails = team.members.map(member =>{
+            return {
+                'email': member.email
             }
-        ]
-    };
-
-    cal.Events.insert(calendarId = 'primary', event)
-        .then(resp => {
-            bot.postMessage(channel, `Calendar event created: ${resp.summary}`);
-
-        })
-        .catch(err => {
-            bot.postMessage(channel, "Error: insertEvent- "+ err.message);
         });
+        let event = {
+            'start': {
+                'dateTime': startDate,
+                'timeZone': "America/Montreal",
+            },
+            'end': {
+                'dateTime': endDate,
+                'timeZone': "America/Montreal",
+            },
+            'summary': 'Scrum',
+            'status': 'confirmed',
+            'colorId': 1,
+            'sendNotifications' : true,
+            'attendees': emails
+        };
+
+        cal.Events.insert(calendarId = 'primary', event)
+            .then(resp => {
+                bot.postMessage(channel, `Google Calendar Event created... Scrum will be held on: ${startDate.toString()}` );
+
+            })
+            .catch(err => {
+                bot.postMessage(channel, "Error: insertEvent- "+ err.message);
+            });
+    })
+
 }
 
 let actions = new Map();
