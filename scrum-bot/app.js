@@ -17,9 +17,10 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console,'connection error:'));
 
 db.once('open', function(){
+
     var bot = new SlackBot({
-        token:'xoxb-234107042308-TnLXg7D0EKPu9DtzKTcvmmQ8',
-        name: 'scrum_bot'
+        token:'xoxb-242905906950-m8m5DgSZRsGbzcNM8qr4qGrO',
+        name: 'scrumbot'
     });
     bot.on('start', function() {
         console.log(`\n*****************************\n|       Bot initilized      |\n*****************************`);
@@ -32,11 +33,14 @@ db.once('open', function(){
         bot.on('message', function(data) {
             if(data.type == 'desktop_notification' && isBotMentioned(data)){
                 let contentArr = data.content.split(" ");
-                let action = contentArr[2];
-                let params = contentArr.slice(3);
                 let channel = data.channel;
-
-                actionHandler(action, params, channel);
+                if(contentArr.includes("Eric")){
+                    let action = contentArr[2];
+                    let params = contentArr.slice(3);
+                    actionHandler(action, params, channel);
+                }else{
+                    bot.postMessage(channel, "You're not Eric :)");
+                }
             }
         });
     });

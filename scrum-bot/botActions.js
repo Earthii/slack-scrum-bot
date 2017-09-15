@@ -13,7 +13,7 @@ function createTeam(bot, params, channel) {
         name: params[0],
         members: []
     })
-    console.log('hi')
+
     team.save(function (err, team) {
         if (err) {
             throw err;
@@ -49,6 +49,7 @@ function addMember(bot, params, channel) {
     }
     let teamName = params[0];
     let membersToAdd = params.slice(1);
+
     teamModel.findOne({name: teamName}).then((team) => {
         if (team == null) {
             bot.postMessage(channel, 'Team did not exist... cannot add a member to a non existing team');
@@ -56,39 +57,31 @@ function addMember(bot, params, channel) {
         }
         let currentMembers = team.members;
         let tmpMemberArr = [...currentMembers];
-        let allNewMembers = [];
-        membersToAdd.forEach(name => {
-            if (name != undefined && name != "" && name != null) {
-                allNewMembers.push(bot.getUser(name));
-            }
-        });
-
-        Promise.all(allNewMembers)
-            .then(members => {
-                let newMembers = members.map((member) => {
+        // let allNewMembers = [];
+        bot.getUsers().then(allUsers => {
+            var membersArr = membersToAdd.map(name => {
+                var user = allUsers.members.filter(member => member.real_name.includes(name))[0];
+                if(user != null && user != undefined){
                     return {
-                        username: member.name,
-                        real_name: member.real_name,
-                        email: member.profile.email
+                        username: user.name,
+                        real_name: user.real_name,
+                        email: user.profile.email
                     }
-                });
+                }
 
-                newMembers.forEach((member) => {
-                    let filter = currentMembers.filter((currentMember) => {
-                        return currentMember.username === member.username
-                    });
+            });
+            membersArr.forEach((member) => {
+                let filter = currentMembers.filter((currentMember) => currentMember.username == member.username);
 
-                    if (!filter.length) {
-                        tmpMemberArr.push(member);
-                    }
-                });
+                if (!filter.length) {
+                    tmpMemberArr.push(member);
+                }
+            });
 
-                teamModel.findByIdAndUpdate(team._id, {members: tmpMemberArr}).then(() => {
-                    bot.postMessage(channel, 'These names have been added to ' + teamName + ':' + newMembers.map((member) => ` @${member.username} : ${member.real_name}`));
-                })
-            }, (err) => {
-                bot.postMessage(channel, "seems like not all of the mentioned username can be found in this slack team...");
+            teamModel.findByIdAndUpdate(team._id, {members: tmpMemberArr}).then(() => {
+                bot.postMessage(channel, 'These names have been added to ' + teamName + ':' + membersArr.map((member) => ` @${member.username} : ${member.real_name}`));
             })
+        })
     })
 }
 
