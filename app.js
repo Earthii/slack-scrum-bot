@@ -7,6 +7,12 @@ var app = express();
 var SlackBot = require('slackbots');
 var mongoose = require('mongoose');
 var botActions = require('./botActions');
+var http = require("http");
+
+//Keep heroku awake
+setInterval(function() {
+    http.get("https://soen343-scrumbot.herokuapp.com/");
+}, 300000); // every 5 minutes (300000)
 
 mongoose.connect('mongodb://Earthii:Eric1234@ds115124.mlab.com:15124/scrum-bot', {
     useMongoClient: true
