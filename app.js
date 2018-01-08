@@ -7,12 +7,7 @@ var app = express();
 var SlackBot = require('slackbots');
 var mongoose = require('mongoose');
 var botActions = require('./botActions');
-var http = require("http");
-
-//Keep heroku awake
-setInterval(function() {
-    http.get("https://soen343-scrumbot.herokuapp.com/");
-}, 300000); // every 5 minutes (300000)
+var https = require("https");
 
 mongoose.connect('mongodb://Earthii:Eric1234@ds115124.mlab.com:15124/scrum-bot', {
     useMongoClient: true
@@ -36,6 +31,8 @@ db.once('open', function(){
             icon_emoji: ':cat:'
         };
 
+        isNewDay(bot);
+
         bot.on('message', function(data) {
             if(data.type == 'desktop_notification' && isBotMentioned(data)){
                 let contentArr = data.content.split(" ");
@@ -43,7 +40,11 @@ db.once('open', function(){
                 if(contentArr.includes("Eric:")){
                     let action = contentArr[2];
                     let params = contentArr.slice(3);
-                    actionHandler(action, params, channel);
+                    try{
+                        actionHandler(action, params, channel);
+                    }catch(err){
+                        bot.postMessage(channel, err);
+                    }
                 }else{
                     bot.postMessage(channel, "You're not Eric :)");
                 }
@@ -59,7 +60,6 @@ db.once('open', function(){
                 botActions.get(action)(bot, params, channel);
             }catch(err){
                 bot.postMessage(channel, err);
-
             }
         }
 
@@ -74,6 +74,16 @@ db.once('open', function(){
             return false
         }
 
+    }
+
+    function isNewDay(bot){
+        var now = new Date;
+        var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+        setTimeout(function() {
+            console.log("it is midnight!");
+            bot.postMessage("C7EKNM067",  `*--------------- ${now.toDateString()} ---------------*`);
+        }, midnight.getTime() - now.getTime());
     }
 });
 // uncomment after placing your favicon in /public

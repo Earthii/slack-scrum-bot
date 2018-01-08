@@ -77,6 +77,7 @@ function addMember(bot, params, channel) {
 
             });
             membersArr.forEach((member) => {
+                console.log(member)
                 let filter = currentMembers.filter((currentMember) => currentMember.username == member.username);
 
                 if (!filter.length) {
